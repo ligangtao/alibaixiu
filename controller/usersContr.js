@@ -41,7 +41,7 @@ module.exports = {
         })
     },
     // 根据用户 id 删除用户
-    getdelUser: (req, res) => {
+    delUser: (req, res) => {
         // 接收 id
         let id = req.query.id
         // 执行 sql
@@ -50,6 +50,34 @@ module.exports = {
             res.send({
                 status: 200,
                 msg: '删除成功'
+            })
+        })
+    },
+    // 根据用户 id 得到用户对象
+    getUserById: (req, res) => {
+        // 1.0 接收id
+        let id = req.query.id
+        // 2.0 根据id查询数据
+        let selSql = `SELECT * FROM users WHERE id = ${id}`
+        userdb.query(selSql, result => {
+            // console.log(result[0])
+            res.send({
+                status: 200,
+                msg: '查询成功',
+                data: result[0]
+            })
+        })
+    },
+    // 修改用户
+    updateUser: (req, res) => {
+        // 接收参数
+        var params = req.body
+        // 修改数据到 mysql
+        let updateSql = `UPDATE users SET email='${params.email}', nickname='${params.nickname}', password='${params.password}' WHERE id=${params.id}`
+        userdb.query(updateSql, result => {
+            res.send({
+                status: 200,
+                msg: '修改成功'
             })
         })
     }
